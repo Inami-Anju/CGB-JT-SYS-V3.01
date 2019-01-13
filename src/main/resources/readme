@@ -1,0 +1,47 @@
+jt项目 采用MVC架构
+配置数据库
+创建maven web项目，名字为CGB-JT-SYS-V3.01
+项目编码 utf-8  （File Encodings）
+taomcat 7.0（不用插件）
+project facets jdk1.8  在maven的配置文件中修改<profile>
+
+采用全注解方式，去除部署描述文件web.xml
+添加项目依赖
+1 Druid连接池  注意组id 是com.alibaba,有的是io.alibaba，盗版的
+2 mybatis
+3 springmvc
+4 jackjson
+5 junit
+
+创建替代加载spring*-xml的配置类 测试TestBase
+创建LruCache（基于LRU算法的cache）（cache缓存，内存的一块区域）（不使用mybatis的cache）
+//最早的缓存意识  bufferedStream
+//测试缓存是否被加载
+
+创建mybatis的配置
+
+创建替代web.xml的配置
+
+创建log controller  entity
+
+//JDBC测试  用阿里的durid替代MySql提供的BaiscDataSource   良好
+//测试mybatis单独使用：存在以下问题：
+1sqlSessionFactoryBuilder.build(in);的in流应该是mybatisconfig.xml的流，而不是properties配置流提示异常（没有文件的开头）；
+2 如果想看流read读出来可以，但用build的读就读不出来了，提示异常（提前到达文件的末尾）；
+3 mappers-resource配置 mapper-xml 时应注意路径拼写，尽量复制，避免中文输入法输入难以辨认的错误和少s的现象，
+4 IDEA应注意构建project和artifict不是相同含义，应注意在classes是project的，由maven管理，不受model管理，不会在resources内容配置，要在maven-pom中配置插件 <resources>
+                                                                                                                                                             <resource>
+                                                                                                                                                               <directory>src/main/java</directory>
+                                                                                                                                                               <includes>
+                                                                                                                                                                 <include>**/*.xml</include>
+                                                                                                                                                               </includes>
+                                                                                                                                                             </resource>
+                                                                                                                                                             <resource>
+                                                                                                                                                               <directory>src/main/resources</directory>
+                                                                                                                                                               <includes>
+                                                                                                                                                                 <include>**/*.*</include>
+                                                                                                                                                               </includes>
+                                                                                                                                                             </resource>
+5之所以用properties配置，是因为直接在xml文件中写url会无法识别；和&导致无法拼写url，，${jdbcDriver}直接和属性的key相同即可
+//测试SqlSessionFactoryBean：存在问题
+1   bean通过getObject获得factory，需配置setDataSource和mapperlocation或configlocation（在里面写）

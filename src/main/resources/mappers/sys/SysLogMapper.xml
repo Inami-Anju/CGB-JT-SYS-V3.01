@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.jt.sys.dao.SysLogDao">
+
+
+	<insert id="insert">
+		insert into sys_logs(username, operation, method, params, time, ip, createdTime)
+		 VALUES (#{username},#{operation},#{method},#{params},#{time},#{ip},#{createdTime})
+	</insert>
+
+	<!-- 插入用户数据 -->
+	<!-- Integer insert(User user) -->
+
+
+	<select id="getRowCount" resultType="java.lang.Integer">
+		select count(*)
+		from sys_Logs
+		<include refid="queryWhereId"/>
+
+		<!-- 函数用于实现字符串连接，“”“"%#{}%"认为是字符串 -->
+	</select>
+	<select id="findPageObjects" resultType="com.jt.sys.entity.SysLog">
+		select *
+		from sys_Logs
+		<include refid="queryWhereId"/>
+		order by createdTime desc
+		limit #{startIndex},#{pageSize}
+
+	</select>
+
+
+    <sql id="queryWhereId">
+		<where> 
+			<if test="username!=null and username!=''">
+				username like concat("%",#{username},"%")
+			</if>
+		</where>
+	</sql> 
+</mapper>
+
+
+
+
+
+
+
+
